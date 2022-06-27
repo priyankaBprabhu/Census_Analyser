@@ -13,9 +13,9 @@ import java.util.List;
 public class CensusAnalyser {
     public int loadIndiaCensusData(String csvFilePath) throws CensusAnalyserException {
         String[] splitedPath = csvFilePath.split("[.]");
-        String extentionType = splitedPath[splitedPath.length - 1];
-        if(!extentionType.equals("csv")){
-            throw new CensusAnalyserException("Invalid Extension",CensusAnalyserException.ExceptionType.WRONG_CSV_FILETYPE_PATH);
+        String extensionType = splitedPath[splitedPath.length - 1];
+        if(!extensionType.equals("csv")){
+            throw new CensusAnalyserException("Invalid Extension",CensusAnalyserException.ExceptionType.CENSUS_TYPE_PROBLEM);
         }
         try {
             Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
