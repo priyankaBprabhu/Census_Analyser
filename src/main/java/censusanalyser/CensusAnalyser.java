@@ -8,22 +8,30 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Iterator;
+import java.util.List;
 
 public class CensusAnalyser {
     public int loadIndiaCensusData(String csvFilePath) throws CensusAnalyserException {
+        String[] splitedPath = csvFilePath.split("[.]");
+        String extentionType = splitedPath[splitedPath.length - 1];
+        if(!extentionType.equals("csv")){
+            throw new CensusAnalyserException("Invalid Extension",CensusAnalyserException.ExceptionType.WRONG_CSV_FILETYPE_PATH);
+        }
         try {
             Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
             CsvToBeanBuilder<IndiaCensusCSV> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
             csvToBeanBuilder.withType(IndiaCensusCSV.class);
             csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
             CsvToBean<IndiaCensusCSV> csvToBean = csvToBeanBuilder.build();
-            Iterator<IndiaCensusCSV> censusCSVIterator = csvToBean.iterator();;
-            int namOfEateries = 0;
-            while (censusCSVIterator.hasNext()) {
-                namOfEateries++;
-                IndiaCensusCSV censusData = censusCSVIterator.next();
-            }
-            return namOfEateries;
+//            Iterator<IndiaCensusCSV> censusCSVIterator = csvToBean.iterator();;
+//            int namOfEateries = 0;
+//            while (censusCSVIterator.hasNext()) {
+//                namOfEateries++;
+//                IndiaCensusCSV censusData = censusCSVIterator.next();
+//            }
+//            return namOfEateries;
+            List<IndiaCensusCSV> censusCSVList = csvToBean.parse();
+            return censusCSVList.size();
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
