@@ -17,7 +17,7 @@ public class CensusAnalyser {
         if (!extensionType.equals("csv")) {
             throw new CensusAnalyserException("Invalid Extension", CensusAnalyserException.ExceptionType.CENSUS_TYPE_PROBLEM);
         }
-        try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) {
+        try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
             CsvToBeanBuilder<IndiaCensusCSV> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
             csvToBeanBuilder.withType(IndiaCensusCSV.class);
             csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
@@ -41,12 +41,12 @@ public class CensusAnalyser {
 
     }
     public int loadIndiaStateCodeData(String csvFilePath) throws CensusAnalyserException {
-        try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) {
-            CsvToBeanBuilder<IndiaCensusCSV> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
-            csvToBeanBuilder.withType(IndiaCensusCSV.class);
+        try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
+            CsvToBeanBuilder<IndiaStateDataCSV> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
+            csvToBeanBuilder.withType(IndiaStateDataCSV.class);
             csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
-            CsvToBean<IndiaCensusCSV> csvToBean = csvToBeanBuilder.build();
-            List<IndiaCensusCSV> censusCSVList = csvToBean.parse();
+            CsvToBean<IndiaStateDataCSV> csvToBean = csvToBeanBuilder.build();
+            List<IndiaStateDataCSV> censusCSVList = csvToBean.parse();
             return censusCSVList.size();
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
