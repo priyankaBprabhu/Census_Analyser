@@ -40,6 +40,7 @@ public class CensusAnalyser {
         }
 
     }
+
     public int loadIndiaStateCodeData(String csvFilePath) throws CensusAnalyserException {
         String[] splitPath = csvFilePath.split("[.]");
         String extensionType = splitPath[splitPath.length - 1];
@@ -56,6 +57,9 @@ public class CensusAnalyser {
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+        } catch (RuntimeException e) {
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.WRONG_HEADER);
         }
     }
 }
