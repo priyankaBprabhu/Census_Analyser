@@ -12,13 +12,12 @@ import java.util.List;
 
 public class CensusAnalyser {
     public int loadIndiaCensusData(String csvFilePath) throws CensusAnalyserException {
-        String[] splitedPath = csvFilePath.split("[.]");
-        String extensionType = splitedPath[splitedPath.length - 1];
-        if(!extensionType.equals("csv")){
-            throw new CensusAnalyserException("Invalid Extension",CensusAnalyserException.ExceptionType.CENSUS_TYPE_PROBLEM);
+        String[] splitPath = csvFilePath.split("[.]");
+        String extensionType = splitPath[splitPath.length - 1];
+        if (!extensionType.equals("csv")) {
+            throw new CensusAnalyserException("Invalid Extension", CensusAnalyserException.ExceptionType.CENSUS_TYPE_PROBLEM);
         }
-        try {
-            Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
+        try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) {
             CsvToBeanBuilder<IndiaCensusCSV> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
             csvToBeanBuilder.withType(IndiaCensusCSV.class);
             csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
@@ -35,9 +34,11 @@ public class CensusAnalyser {
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
             throw new CensusAnalyserException(e.getMessage(),
-                    CensusAnalyserException.ExceptionType.WRONG_HEADER);        }
+                    CensusAnalyserException.ExceptionType.WRONG_HEADER);
+        }
 
     }
+
 }
